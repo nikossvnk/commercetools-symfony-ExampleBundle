@@ -1,0 +1,14 @@
+{% extends "CtpBundle::layout.html.twig" %}
+
+{% block container %}
+
+    {#{{ form_start(formDetails) }}#}
+    {#{{ form_widget(formDetails) }}#}
+    {#{{ form_end(formDetails) }}#}
+
+    {{ form_start(formDetails) }}
+    {% form_theme formDetails 'bootstrap_3_layout.html.twig' %}
+    {{ form_widget(formDetails) }}
+    {{ form_end(formDetails) }}
+
+{% endblock %}
