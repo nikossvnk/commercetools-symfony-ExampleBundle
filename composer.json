@@ -17,12 +17,12 @@
       "php": "^7.1",
       "symfony/form": "^3.4 | ^4.0",
       "symfony/validator": "^3.4 | ^4.0",
-      "commercetools/symfony-ctp-bundle": "dev-master",
-      "commercetools/symfony-catalog-bundle": "dev-master",
-      "commercetools/symfony-cart-bundle": "dev-master",
-      "commercetools/symfony-customer-bundle": "dev-master",
-      "commercetools/symfony-review-bundle": "dev-master",
-      "commercetools/symfony-shopping-list-bundle": "dev-master",
-      "commercetools/symfony-state-bundle": "dev-master"
+      "commercetools/symfony-ctp-bundle": "self.version",
+      "commercetools/symfony-catalog-bundle": "self.version",
+      "commercetools/symfony-cart-bundle": "self.version",
+      "commercetools/symfony-customer-bundle": "self.version",
+      "commercetools/symfony-review-bundle": "self.version",
+      "commercetools/symfony-shopping-list-bundle": "self.version",
+      "commercetools/symfony-state-bundle": "self.version"
     }
 }
