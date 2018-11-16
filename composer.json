@@ -14,8 +14,15 @@
         }
     },
     "require": {
-        "php": ">=5.6",
+      "php": "^7.1",
       "symfony/form": "^3.4 | ^4.0",
-      "commercetools/symfony-ctp-bundle": "^2.5"
+      "symfony/validator": "^3.4 | ^4.0",
+      "commercetools/symfony-ctp-bundle": "dev-master",
+      "commercetools/symfony-catalog-bundle": "dev-master",
+      "commercetools/symfony-cart-bundle": "dev-master",
+      "commercetools/symfony-customer-bundle": "dev-master",
+      "commercetools/symfony-review-bundle": "dev-master",
+      "commercetools/symfony-shopping-list-bundle": "dev-master",
+      "commercetools/symfony-state-bundle": "dev-master"
     }
 }
