@@ -17,12 +17,17 @@
       "php": "^7.1",
       "symfony/form": "^3.4 | ^4.0",
       "symfony/validator": "^3.4 | ^4.0",
-      "commercetools/symfony-ctp-bundle": "self.version",
-      "commercetools/symfony-catalog-bundle": "self.version",
-      "commercetools/symfony-cart-bundle": "self.version",
-      "commercetools/symfony-customer-bundle": "self.version",
-      "commercetools/symfony-review-bundle": "self.version",
-      "commercetools/symfony-shopping-list-bundle": "self.version",
-      "commercetools/symfony-state-bundle": "self.version"
+      "commercetools/symfony-ctp-bundle": "^0.3",
+      "commercetools/symfony-catalog-bundle": "^0.3",
+      "commercetools/symfony-cart-bundle": "^0.3",
+      "commercetools/symfony-customer-bundle": "^0.3",
+      "commercetools/symfony-review-bundle": "^0.3",
+      "commercetools/symfony-shopping-list-bundle": "^0.3",
+      "commercetools/symfony-state-bundle": "^0.3"
+    },
+    "extra": {
+      "branch-alias": {
+        "dev-master": "0.3.0-dev"
+      }
     }
 }
