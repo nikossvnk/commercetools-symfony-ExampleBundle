@@ -74,7 +74,8 @@ class PaymentController extends Controller
         $orderId,
         CtpUser $user = null
     ) {
-        $payment = $this->manager->getPaymentForUser($request->getLocale(), $paymentId, $user, $session->getId());
+        $customerReference = is_null($user) ? null : CustomerReference::ofId($user->getId());
+        $payment = $this->manager->getPaymentForUser($request->getLocale(), $paymentId, $customerReference, $session->getId());
 
         if (!$payment instanceof Payment) {
             $this->addFlash('error', sprintf('Cannot find payment: %s', $paymentId));

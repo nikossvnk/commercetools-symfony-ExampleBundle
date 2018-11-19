@@ -138,7 +138,7 @@ class ReviewController extends Controller
         }
 
         $workflow->apply($review, $request->get('toState'));
-        return $this->redirect($this->generateUrl('_ctp_example_product_by_id', ['id' => $review->getTarget()->getid()]));
+        return $this->redirect($this->generateUrl('_ctp_example_product_by_id', ['id' => $review->getTarget()->getId()]));
     }
 
 }
