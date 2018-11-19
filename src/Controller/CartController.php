@@ -88,11 +88,13 @@ class CartController extends Controller
             if(!is_null($cartId)){
                 $cart = $this->manager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-                $cartBuilder = $this->manager->update($cart);
-                $cartBuilder->addAction(
-                    CartAddLineItemAction::ofProductIdVariantIdAndQuantity($productId, $variantId, $quantity)
-                );
-                $cartBuilder->flush();
+                if (!is_null($cart)) {
+                    $cartBuilder = $this->manager->update($cart);
+                    $cartBuilder->addAction(
+                        CartAddLineItemAction::ofProductIdVariantIdAndQuantity($productId, $variantId, $quantity)
+                    );
+                    $cartBuilder->flush();
+                }
 
             } else {
                 $lineItem = LineItemDraft::ofProductId($productId)->setVariantId($variantId)->setQuantity($quantity);
@@ -136,11 +138,13 @@ class CartController extends Controller
 
         $cart = $this->manager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-        $cartBuilder = $this->manager->update($cart);
-        $cartBuilder->addAction(
-            CartChangeLineItemQuantityAction::ofLineItemIdAndQuantity($lineItemId, $quantity)
-        );
-        $cartBuilder->flush();
+        if (!is_null($cart)) {
+            $cartBuilder = $this->manager->update($cart);
+            $cartBuilder->addAction(
+                CartChangeLineItemQuantityAction::ofLineItemIdAndQuantity($lineItemId, $quantity)
+            );
+            $cartBuilder->flush();
+        }
 
         return new RedirectResponse($this->generateUrl('_ctp_example_cart'));
     }
@@ -151,10 +155,12 @@ class CartController extends Controller
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->manager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-        $cartBuilder = $this->manager->update($cart);
-        $cartBuilder->addAction(CartRemoveLineItemAction::ofLineItemId($lineItemId));
+        if (!is_null($cart)) {
+            $cartBuilder = $this->manager->update($cart);
+            $cartBuilder->addAction(CartRemoveLineItemAction::ofLineItemId($lineItemId));
 
-        $cartBuilder->flush();
+            $cartBuilder->flush();
+        }
 
         return new RedirectResponse($this->generateUrl('_ctp_example_cart'));
     }
@@ -180,9 +186,11 @@ class CartController extends Controller
             }
         }
 
-        $cartBuilder = $this->manager->update($cart);
-        $cartBuilder->addShoppingList(CartAddShoppingListAction::ofShoppingList($shoppingList));
-        $cartBuilder->flush();
+        if (!is_null($cart)) {
+            $cartBuilder = $this->manager->update($cart);
+            $cartBuilder->addShoppingList(CartAddShoppingListAction::ofShoppingList($shoppingList));
+            $cartBuilder->flush();
+        }
 
         /**
          * TODO delete shopping list using a listener

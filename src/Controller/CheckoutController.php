@@ -15,6 +15,7 @@ use Commercetools\Symfony\CartBundle\Manager\CartManager;
 use Commercetools\Symfony\CartBundle\Manager\OrderManager;
 use Commercetools\Symfony\CartBundle\Manager\ShippingMethodManager;
 use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
+use Commercetools\Symfony\CustomerBundle\Security\User\User;
 use Commercetools\Symfony\ExampleBundle\Entity\CartEntity;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddressType;
 use Commercetools\Symfony\CartBundle\Model\Repository\CartRepository;
@@ -102,7 +103,7 @@ class CheckoutController extends Controller
 
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-        if (is_null($cart->getId())) {
+        if (is_null($cart) || is_null($cart->getId())) {
             return $this->redirect($this->generateUrl('_ctp_example_cart'));
         }
 
@@ -183,7 +184,7 @@ class CheckoutController extends Controller
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-        if (is_null($cart->getId())) {
+        if (is_null($cart) || is_null($cart->getId())) {
             return $this->redirect($this->generateUrl('_ctp_example_cart'));
         }
 
@@ -207,12 +208,12 @@ class CheckoutController extends Controller
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
 
-        if (is_null($cart->getId())) {
+        if (is_null($cart) || is_null($cart->getId())) {
             return $this->redirect($this->generateUrl('_ctp_example_cart'));
         }
 
         $entity = CartEntity::ofCart($cart);
-        if (!is_null($user) && count(array_diff_key($cart->getShippingAddress()->toArray(), ['country' => true])) == 0 ) {
+        if (!is_null($user) && count(array_diff_key($cart->getShippingAddress()->toArray(), ['country' => true])) == 0 && $user instanceof User) {
             $entity->setShippingAddress($user->getDefaultShippingAddress()->toArray());
         }
 
