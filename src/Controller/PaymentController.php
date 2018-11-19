@@ -16,6 +16,7 @@ use Commercetools\Core\Request\Orders\Command\OrderAddPaymentAction;
 use Commercetools\Symfony\CartBundle\Manager\CartManager;
 use Commercetools\Symfony\CartBundle\Manager\PaymentManager;
 use Commercetools\Symfony\CartBundle\Model\Repository\CartRepository;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\StateBundle\Model\CtpMarkingStore\CtpMarkingStorePaymentState;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Commercetools\Core\Client;
@@ -23,7 +24,6 @@ use Commercetools\Symfony\CartBundle\Manager\OrderManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 use Symfony\Component\Workflow\Registry;
 
@@ -62,9 +62,9 @@ class PaymentController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
      * @param $paymentId
      * @param $orderId
+     * @param CtpUser|null $user
      * @return Response
      */
     public function getPaymentAction(
@@ -72,7 +72,7 @@ class PaymentController extends Controller
         SessionInterface $session,
         $paymentId,
         $orderId,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $payment = $this->manager->getPaymentForUser($request->getLocale(), $paymentId, $user, $session->getId());
 
@@ -90,10 +90,10 @@ class PaymentController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
      * @param $orderId
      * @param OrderManager $orderManager
      * @param CtpMarkingStorePaymentState $markingStorePaymentState
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function createPaymentForOrderAction(
@@ -102,7 +102,7 @@ class PaymentController extends Controller
         OrderManager $orderManager,
         CtpMarkingStorePaymentState $markingStorePaymentState,
         $orderId,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $order = $orderManager->getOrderForUser($request->getLocale(), $orderId, $user, $session->getId());
 
@@ -133,7 +133,7 @@ class PaymentController extends Controller
      * @param SessionInterface $session
      * @param CartManager $cartManager
      * @param CtpMarkingStorePaymentState $markingStorePaymentState
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function createPaymentForCartAction(
@@ -141,7 +141,7 @@ class PaymentController extends Controller
         SessionInterface $session,
         CartManager $cartManager,
         CtpMarkingStorePaymentState $markingStorePaymentState,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
@@ -173,7 +173,7 @@ class PaymentController extends Controller
      * @param Money $totalPrice
      * @param SessionInterface $session
      * @param CtpMarkingStorePaymentState $markingStorePaymentState
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return Payment
      */
     public function createPayment(
@@ -181,7 +181,7 @@ class PaymentController extends Controller
         Money $totalPrice,
         SessionInterface $session,
         CtpMarkingStorePaymentState $markingStorePaymentState,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $paymentStatus = PaymentStatus::of()
             ->setInterfaceText('Paypal')
@@ -201,7 +201,7 @@ class PaymentController extends Controller
      * @param OrderManager $orderManager
      * @param $toState
      * @param $paymentId
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function updatePaymentAction(
@@ -210,7 +210,7 @@ class PaymentController extends Controller
         OrderManager $orderManager,
         $toState,
         $paymentId,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $customerReference = is_null($user) ? null : CustomerReference::ofId($user->getId());
         $payment = $this->manager->getPaymentForUser($request->getLocale(), $paymentId, $customerReference, $session->getId());

@@ -7,13 +7,13 @@ namespace Commercetools\Symfony\ExampleBundle\Controller;
 use Commercetools\Core\Model\Order\Order;
 use Commercetools\Core\Model\State\StateReference;
 use Commercetools\Symfony\CartBundle\Manager\PaymentManager;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\StateBundle\Model\ItemStateWrapper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Commercetools\Core\Client;
 use Commercetools\Symfony\CartBundle\Manager\OrderManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 use Symfony\Component\Workflow\Registry;
 
@@ -60,10 +60,10 @@ class OrderController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function indexAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $orders = $this->manager->getOrdersForUser($request->getLocale(), $user, $session->getId());
 
@@ -75,11 +75,11 @@ class OrderController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @param $orderId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showOrderAction(Request $request, SessionInterface $session, UserInterface $user = null, $orderId)
+    public function showOrderAction(Request $request, SessionInterface $session, CtpUser $user = null, $orderId)
     {
         $order = $this->manager->getOrderForUser($request->getLocale(), $orderId, $user, $session->getId());
 
@@ -103,10 +103,10 @@ class OrderController extends Controller
      * @param Request $request
      * @param SessionInterface $session
      * @param $orderId
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function updateLineItemAction(Request $request, SessionInterface $session, $orderId, UserInterface $user = null)
+    public function updateLineItemAction(Request $request, SessionInterface $session, $orderId, CtpUser $user = null)
     {
         $order = $this->manager->getOrderForUser($request->getLocale(), $orderId, $user, $session->getId());
 
@@ -143,12 +143,12 @@ class OrderController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @param $orderId
      * @param $toState
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function updateOrderAction(Request $request, SessionInterface $session, UserInterface $user = null, $orderId, $toState)
+    public function updateOrderAction(Request $request, SessionInterface $session, CtpUser $user = null, $orderId, $toState)
     {
         $order = $this->manager->getOrderForUser($request->getLocale(), $orderId, $user, $session->getId());
 

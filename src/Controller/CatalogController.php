@@ -7,6 +7,7 @@ use Commercetools\Core\Model\Product\ProductProjection;
 use Commercetools\Core\Model\Product\Search\Filter;
 use Commercetools\Symfony\CatalogBundle\Manager\CatalogManager;
 use Commercetools\Symfony\CtpBundle\Model\QueryParams;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Entity\ProductEntity;
 use Commercetools\Symfony\ExampleBundle\Entity\ProductToShoppingList;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddToCartType;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Commercetools\Symfony\ShoppingListBundle\Manager\ShoppingListManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Commercetools\Core\Model\Customer\CustomerReference;
 use Commercetools\Core\Model\ShoppingList\ShoppingList;
 
@@ -86,7 +86,7 @@ class CatalogController extends Controller
 
     }
 
-    public function detailBySlugAction(Request $request, $slug, SessionInterface $session, UserInterface $user = null)
+    public function detailBySlugAction(Request $request, $slug, SessionInterface $session, CtpUser $user = null)
     {
         $country = $this->getCountryFromConfig();
         $currency = $this->getCurrencyFromConfig();
@@ -101,14 +101,14 @@ class CatalogController extends Controller
         return $this->productDetails($request, $product, $session, $user);
     }
 
-    public function detailByIdAction(Request $request, $id, SessionInterface $session, UserInterface $user = null)
+    public function detailByIdAction(Request $request, $id, SessionInterface $session, CtpUser $user = null)
     {
         $product = $this->catalogManager->getProductById($request->getLocale(), $id);
 
         return $this->productDetails($request, $product, $session, $user);
     }
 
-    private function productDetails(Request $request, ProductProjection $product, SessionInterface $session, UserInterface $user = null)
+    private function productDetails(Request $request, ProductProjection $product, SessionInterface $session, CtpUser $user = null)
     {
         $variantIds = [];
         foreach ($product->getAllVariants() as $variant) {

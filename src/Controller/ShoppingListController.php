@@ -10,6 +10,7 @@ use Commercetools\Core\Request\ShoppingLists\Command\ShoppingListAddLineItemActi
 use Commercetools\Core\Request\ShoppingLists\Command\ShoppingListChangeLineItemQuantityAction;
 use Commercetools\Core\Request\ShoppingLists\Command\ShoppingListRemoveLineItemAction;
 use Commercetools\Symfony\CtpBundle\Model\QueryParams;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Entity\ProductToShoppingList;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddToShoppingListType;
 use Commercetools\Symfony\ShoppingListBundle\Manager\ShoppingListManager;
@@ -17,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class ShoppingListController extends Controller
@@ -41,7 +41,7 @@ class ShoppingListController extends Controller
         $this->manager = $manager;
     }
 
-    public function indexAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function indexAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $params = new QueryParams();
         $params->add('expand', 'lineItems[*].variant');
@@ -56,7 +56,7 @@ class ShoppingListController extends Controller
         return $this->render('ExampleBundle:shoppinglist:index.html.twig', ['lists' => $shoppingLists]);
     }
 
-    public function createAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function createAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         if(is_null($user)){
             $this->manager->createShoppingListByAnonymous($request->getLocale(), $session->getId(), $request->get('shoppingListName'));
@@ -67,7 +67,7 @@ class ShoppingListController extends Controller
         return $this->redirectToRoute('_ctp_example_shoppingList');
     }
 
-    public function deleteByIdAction(Request $request, $shoppingListId, SessionInterface $session, UserInterface $user = null)
+    public function deleteByIdAction(Request $request, $shoppingListId, SessionInterface $session, CtpUser $user = null)
     {
         $customerReference = is_null($user) ? null : CustomerReference::ofId($user->getId());
 
@@ -78,7 +78,7 @@ class ShoppingListController extends Controller
         return new RedirectResponse($this->generateUrl('_ctp_example_cart'));
     }
 
-    public function addLineItemAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function addLineItemAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $shoppingListsIds = [];
 

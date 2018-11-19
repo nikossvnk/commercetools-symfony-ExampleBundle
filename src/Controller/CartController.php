@@ -12,6 +12,7 @@ use Commercetools\Core\Request\Carts\Command\CartAddLineItemAction;
 use Commercetools\Core\Request\Carts\Command\CartAddShoppingListAction;
 use Commercetools\Core\Request\Carts\Command\CartChangeLineItemQuantityAction;
 use Commercetools\Core\Request\Carts\Command\CartRemoveLineItemAction;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Entity\ProductEntity;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddToCartType;
 use Commercetools\Symfony\CartBundle\Model\Repository\CartRepository;
@@ -19,13 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Commercetools\Core\Model\Cart\Cart;
 use Commercetools\Core\Client;
 use Commercetools\Symfony\CartBundle\Manager\CartManager;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class CartController extends Controller
@@ -51,7 +49,13 @@ class CartController extends Controller
         $this->manager = $manager;
     }
 
-    public function indexAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    /**
+     * @param Request $request
+     * @param SessionInterface $session
+     * @param CtpUser|null $user
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->manager->getCart($request->getLocale(), $cartId, $user, $session->getId());
@@ -65,7 +69,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function addLineItemAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function addLineItemAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $productEntity = new ProductEntity();
 
@@ -124,7 +128,7 @@ class CartController extends Controller
 //        return $response;
 //    }
 
-    public function changeLineItemAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function changeLineItemAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $lineItemId = $request->get('lineItemId');
         $quantity = (int)$request->get('quantity');
@@ -141,7 +145,7 @@ class CartController extends Controller
         return new RedirectResponse($this->generateUrl('_ctp_example_cart'));
     }
 
-    public function deleteLineItemAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function deleteLineItemAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $lineItemId = $request->get('lineItemId');
         $cartId = $session->get(CartRepository::CART_ID);
@@ -155,7 +159,7 @@ class CartController extends Controller
         return new RedirectResponse($this->generateUrl('_ctp_example_cart'));
     }
 
-    public function addShoppingListToCartAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function addShoppingListToCartAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $cartId = $session->get(CartRepository::CART_ID);
 

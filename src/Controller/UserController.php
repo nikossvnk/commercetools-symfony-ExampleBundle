@@ -10,17 +10,15 @@ use Commercetools\Core\Request\Customers\Command\CustomerChangeAddressAction;
 use Commercetools\Core\Request\Customers\Command\CustomerChangeEmailAction;
 use Commercetools\Core\Request\Customers\Command\CustomerSetFirstNameAction;
 use Commercetools\Core\Request\Customers\Command\CustomerSetLastNameAction;
-use Commercetools\Core\Request\Customers\CustomerByIdGetRequest;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Entity\UserAddress;
 use Commercetools\Symfony\ExampleBundle\Entity\UserDetails;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddressType;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\UserType;
 use Commercetools\Symfony\CustomerBundle\Manager\CustomerManager;
-use Commercetools\Symfony\CustomerBundle\Security\User\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class UserController extends Controller
@@ -72,7 +70,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function detailsAction(Request $request, UserInterface $user)
+    public function detailsAction(Request $request, CtpUser $user)
     {
         $customer = $this->manager->getById($request->getLocale(), $user->getId());
         $entity = UserDetails::ofCustomer($customer);
@@ -112,7 +110,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function addressBookAction(Request $request, UserInterface $user)
+    public function addressBookAction(Request $request, CtpUser $user)
     {
         $customer = $this->manager->getById($request->getLocale(), $user->getId());
 
@@ -121,7 +119,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function editAddressAction(Request $request, UserInterface $user, $addressId)
+    public function editAddressAction(Request $request, CtpUser $user, $addressId)
     {
         $customer = $this->manager->getById($request->getLocale(), $user->getId());
         $address = $customer->getAddresses()->getById($addressId);

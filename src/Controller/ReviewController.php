@@ -11,12 +11,12 @@ use Commercetools\Core\Model\Customer\CustomerReference;
 use Commercetools\Core\Model\Product\ProductReference;
 use Commercetools\Core\Model\Review\Review;
 use Commercetools\Symfony\CtpBundle\Model\QueryParams;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddReviewType;
 use Commercetools\Symfony\ReviewBundle\Manager\ReviewManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 use Symfony\Component\Workflow\Registry;
 
@@ -74,10 +74,10 @@ class ReviewController extends Controller
     /**
      * @param Request $request
      * @param $productId
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return JsonResponse
      */
-    public function createReviewForProductAction(Request $request, $productId, UserInterface $user = null)
+    public function createReviewForProductAction(Request $request, $productId, CtpUser $user = null)
     {
         $form = $this->createForm(AddReviewType::class);
         $form->handleRequest($request);
@@ -106,10 +106,10 @@ class ReviewController extends Controller
     /**
      * @param Request $request
      * @param $reviewId
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function updateReviewAction(Request $request, $reviewId, UserInterface $user = null)
+    public function updateReviewAction(Request $request, $reviewId, CtpUser $user = null)
     {
         if(is_null($user)){
             $this->addFlash('error', 'Do not allow anonymous reviews for now');

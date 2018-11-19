@@ -14,6 +14,7 @@ use Commercetools\Core\Request\Carts\Command\CartSetShippingMethodAction;
 use Commercetools\Symfony\CartBundle\Manager\CartManager;
 use Commercetools\Symfony\CartBundle\Manager\OrderManager;
 use Commercetools\Symfony\CartBundle\Manager\ShippingMethodManager;
+use Commercetools\Symfony\CtpBundle\Security\User\CtpUser;
 use Commercetools\Symfony\ExampleBundle\Entity\CartEntity;
 use Commercetools\Symfony\ExampleBundle\Model\Form\Type\AddressType;
 use Commercetools\Symfony\CartBundle\Model\Repository\CartRepository;
@@ -24,7 +25,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CheckoutController extends Controller
 {
@@ -92,10 +92,10 @@ class CheckoutController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function shippingMethodAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function shippingMethodAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $cartId = $session->get(CartRepository::CART_ID);
         $shippingMethods = $this->shippingMethodManager->getShippingMethodByCart($request->getLocale(), $cartId);
@@ -149,10 +149,10 @@ class CheckoutController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function reviewOrderDetailsAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function reviewOrderDetailsAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
@@ -171,14 +171,14 @@ class CheckoutController extends Controller
      * @param Request $request
      * @param SessionInterface $session
      * @param CtpMarkingStoreOrderState $markingStoreOrderState
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function placeCartToOrderAction(
         Request $request,
         SessionInterface $session,
         CtpMarkingStoreOrderState $markingStoreOrderState,
-        UserInterface $user = null
+        CtpUser $user = null
     ) {
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
@@ -199,10 +199,10 @@ class CheckoutController extends Controller
     /**
      * @param Request $request
      * @param SessionInterface $session
-     * @param UserInterface|null $user
+     * @param CtpUser|null $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function setAddressAction(Request $request, SessionInterface $session, UserInterface $user = null)
+    public function setAddressAction(Request $request, SessionInterface $session, CtpUser $user = null)
     {
         $cartId = $session->get(CartRepository::CART_ID);
         $cart = $this->cartManager->getCart($request->getLocale(), $cartId, $user, $session->getId());
