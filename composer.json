@@ -17,6 +17,7 @@
       "php": "^7.1",
       "symfony/form": "^3.4 | ^4.0",
       "symfony/validator": "^3.4 | ^4.0",
+      "symfony/asset": "^3.4 | ^4.0",
       "commercetools/symfony-ctp-bundle": "^0.3",
       "commercetools/symfony-catalog-bundle": "^0.3",
       "commercetools/symfony-cart-bundle": "^0.3",
